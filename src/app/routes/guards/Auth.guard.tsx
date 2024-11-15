@@ -3,7 +3,7 @@ import {  Navigate } from 'react-router-dom';
 
 import { COOKIES_TYPES } from '@core-constants/cookie';
 import { useAuth } from '@core-hooks/hook-auth/useAuth';
-import { RolUser } from '@core-interfaces/user';
+import { RolUser } from '@core-interfaces/shared/user';
 import { getCookie } from '@core-utils/handle-cookie';
 
 interface Props {
@@ -23,9 +23,6 @@ export const AuthGuard = ({ children, rolAccepted }: Props) => {
   // ==> Check if we have a session
   if( !token )      return ( <Navigate to="/" replace />);
   if( !hasAccess && rolAccepted && rolAccepted?.length > 0 )  return ( <Navigate to="/" replace /> );
-
-  console.log('hasAccess', hasAccess);
-  
 
   return <>{children}</>;
 };

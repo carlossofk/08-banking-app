@@ -1,4 +1,4 @@
-import { RolUser } from '@core-interfaces/user';
+import { RolUser } from '@core-interfaces/shared/user';
 
 export interface Login{
     username: string;

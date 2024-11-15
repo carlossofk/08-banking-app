@@ -1,0 +1,15 @@
+.home-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100dvh;
+  overflow: hidden;
+  transition: grid-template-columns 0.3s ease;
+
+  &__main {
+    grid-column: 2;
+    padding: 2rem;
+    overflow-y: auto;
+    background-color: #fafafa;
+  }
+}

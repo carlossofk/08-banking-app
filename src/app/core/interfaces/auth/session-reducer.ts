@@ -1,15 +1,15 @@
-import { IUser } from '@core-interfaces/user';
+import { IUser } from '@core-interfaces/shared/user';
 
-export enum sessionActions  {
+export enum SessionActions  {
     LOGIN = 'LOGIN',
     LOGOUT= 'LOGOUT',
 };
   
 export type SessionPayloads  = {
-      [sessionActions.LOGIN]: {
+      [SessionActions.LOGIN]: {
         user: IUser;
         token: string;
       };
       
-      [sessionActions.LOGOUT]:  undefined;  
+      [SessionActions.LOGOUT]: undefined;
 };

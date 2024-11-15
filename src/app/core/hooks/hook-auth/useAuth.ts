@@ -1,22 +1,25 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { COOKIES_TYPES } from '@core/constants/cookie';
 import { LoginUserService } from '@core-services/auth/loginUser.service';
 import { AuthContext } from '@core/state/auth-context/AuthContext';
-import { loginSession } from '@core/state/auth-context/session/actions';
+import { loginSession, logoutSession } from '@core/state/auth-context/session/actions';
 import { removeCookie, setCookie } from '@core/utils/handle-cookie';
 import { removeKeySessionStorage, setKeySessionStorage } from '@core-utils/handle-session-client';
 import { SESSION_STORAGE_KEYS } from '@core-constants/session-storage';
 
 export const useAuth = () => {
 
+  const [ isLoading, setIsLoading ] = useState(false);
   const { state, dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
   
   const loginUser = async (userName: string, password: string) => {
+    setIsLoading(true);
     const result = await LoginUserService({ userName, password });
     if( !result.ok || !result.data) {
+      setIsLoading(true);
       return;
     }
 
@@ -34,9 +37,19 @@ export const useAuth = () => {
     }));
     
     // ==> Redirect to dashboard
-    navigate('/dashboard', { replace: true });
+    navigate('/home', { replace: true });
+    setIsLoading(false);
+  };
+
+  const logoutUser = () => {
+    removeKeySessionStorage(SESSION_STORAGE_KEYS.USER);
+    removeKeySessionStorage(SESSION_STORAGE_KEYS.TOKEN_API);
+    removeCookie(COOKIES_TYPES.TOKEN_API);
+    dispatch(logoutSession());
+    navigate('/', { replace: true });
   };
   
+  // ===> Effect for control session
   useEffect(() => {  
     if(state.user && state.token) {
       setKeySessionStorage(SESSION_STORAGE_KEYS.USER, JSON.stringify(state.user));
@@ -53,6 +66,8 @@ export const useAuth = () => {
 
   return {
     user: state.user,
-    loginUser
+    loginUser,
+    logoutUser,
+    loadinOperations: isLoading,
   };
 };

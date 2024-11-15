@@ -1,9 +1,9 @@
-import { ISession } from '@core/interfaces/session';
-import { sessionActions, SessionPayloads } from '@core/interfaces/auth/session-reducer';
+import { ISession } from '@core-interfaces/shared/session';
+import { SessionActions, SessionPayloads } from '@core/interfaces/auth/session-reducer';
 
 // ==> Cases State
 export const sessionCases = {
-  [sessionActions.LOGIN]: (state: ISession, payload: SessionPayloads['LOGIN']): ISession => {
+  [SessionActions.LOGIN]: (state: ISession, payload: SessionPayloads['LOGIN']): ISession => {
     return {
       ...state,
       user: payload.user,
@@ -11,9 +11,11 @@ export const sessionCases = {
     };
   },
 
-  [sessionActions.LOGOUT]: (state: ISession): ISession => {
+  [SessionActions.LOGOUT]: (state: ISession): ISession => {
     return {
       ...state,
+      user: null,
+      token: null,
     };
   },
 };

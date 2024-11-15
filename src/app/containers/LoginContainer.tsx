@@ -4,16 +4,16 @@ import { LoginForm } from '@ui/forms/LoginForm';
 import { LoginLayout } from '@ui/layouts/LoginLayout';
 
 export const LoginContainer = () => {
-  const { user, loginUser } = useAuth();
+  const { user, loginUser, loadinOperations } = useAuth();
 
   if( user ) {
     return ( 
-      <Navigate to="/dashboard" replace /> );
+      <Navigate to="/home" replace /> );
   };
 
   return (
     <LoginLayout>
-      <LoginForm handlerLogin={loginUser} />
+      <LoginForm handlerLogin={loginUser} loadSubmit={loadinOperations} />
     </LoginLayout>
   );
 };

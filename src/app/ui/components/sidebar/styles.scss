@@ -1,0 +1,93 @@
+@use '../../styles/variables' as variables;
+
+.sidebar {
+  grid-row: 1 / span 2;
+  background: variables.$primary-light;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  height: 100%;
+
+
+
+  &__toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+
+    &--icon {
+      object-fit: contain;
+      width: calc(100% - 2rem);
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    gap: 11px;
+    justify-content: space-between;
+
+  }
+
+  &__item {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    flex: none;
+    align-self: stretch;
+    flex-grow: 0;
+    cursor: pointer;
+
+    &--active {
+      background: #EEF2FF;
+      // background: #b8621c;
+    }
+
+    &:hover>.sidebar__icon {
+      color: variables.$secondary-light;
+    }
+
+    &:hover>.sidebar__label {
+      background: variables.$secondary-light;
+      background-clip: text;
+    }
+  }
+
+  &__label {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+    background: variables.$primary-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+
+  &__icon {
+    font-size: 1.8rem;
+    margin-right: 0.5rem;
+    transition: margin 0.3s;
+    color: variables.$primary-color;
+  }
+}

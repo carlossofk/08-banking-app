@@ -4,11 +4,13 @@ import { LoginFormType } from '@core/interfaces/validators-type/login';
 import { useLoginFormControl } from '@core-hooks/hook-form/useLoginForm.control';
 
 import './styles.scss';
+import { FaSpinner } from 'react-icons/fa';
 
 interface Props{
   handlerLogin: (user: string, password: string) => void;
+  loadSubmit: boolean;
 }
-export const LoginForm = ({ handlerLogin }: Props) => {
+export const LoginForm = ({ handlerLogin , loadSubmit }: Props) => {
 
   const { formState, control, handleSubmit } = useLoginFormControl();
 
@@ -58,7 +60,12 @@ export const LoginForm = ({ handlerLogin }: Props) => {
             />
           </fieldset>
 
-          <button type="submit" className='login-form__button'>
+          <button 
+            className='login-form__button'
+            type="submit" 
+            disabled={loadSubmit}
+          >
+            {loadSubmit && <FaSpinner className='login-form__spinner' /> }
             Login
           </button>
         </form>

@@ -1,5 +1,5 @@
 import { SESSION_STORAGE_KEYS } from '@core-constants/session-storage';
-import { ISession } from '@core-interfaces/session';
+import { ISession } from '@core-interfaces/shared/session';
 import { getKeySessionStorage } from '@core-utils/handle-session-client';
 
 const getStateSessionStorage = () => {

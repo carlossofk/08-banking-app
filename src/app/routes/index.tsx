@@ -1,10 +1,12 @@
 import { createHashRouter } from 'react-router-dom';
 
 import { LoginContainer } from '@containers/LoginContainer';
-import { DashboardContainer } from '@containers/DashboardContainer';
+import { HomeContainer } from '@containers/HomeContainer';
 import { AuthGuard } from '@routes-guards/Auth.guard';
-import { NotFound } from '@ui/views/NotFound';
+import { AppProvider } from '@core-state/app-context/AppContext';
 
+import { NotFound } from '@ui/views/NotFound';
+import { Dashboard } from '@ui/views/Dashboard';
 
 export const router = createHashRouter(
   [
@@ -16,26 +18,28 @@ export const router = createHashRouter(
       ),
     },
     {
-      path: '/dashboard',
+      path: '/home',
       element: (
         <AuthGuard rolAccepted={[ 'VIP' ]}>
-          <DashboardContainer />
+          <AppProvider>
+            <HomeContainer />
+          </AppProvider>
         </AuthGuard>
       ),
 
       children: [
         {
           index: true,
-          path: 'home',
-          element: <>home</>
+          path: 'dashboard',
+          element: <Dashboard />
         },
         {
-          path: 'profile',
-          element: <>profile</>
+          path: 'deposit',
+          element: <>deposit</>
         },
         {
-          path: 'settings',
-          element: <>settings</>
+          path: 'withdraw',
+          element: <>withdraw</>
         },
       ],
     },

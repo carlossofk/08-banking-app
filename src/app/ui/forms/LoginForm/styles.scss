@@ -45,7 +45,40 @@
 
     &__button {
         @include button-mixin.button-primary;
+        padding-inline: 30px;
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+
+        &:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        &:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
     }
+
+    &__spinner {
+        font-size: inherit;
+        animation: spin 1s linear infinite;
+
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
 }
 
 .header-login {
