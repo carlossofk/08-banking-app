@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@containers/*": ["./src/app/containers/*"],
+
+      "@core-constants/*": ["./src/app/core/constants/*"],
+      "@core-forms-validators/*": ["./src/app/core/hooks/forms-validators/*"],
+      "@core-hooks/*": ["./src/app/core/hooks/*"],
+      "@core-mappers/*": ["./src/app/core/mappers/*"],
+      "@core-interfaces/*": ["./src/app/core/interfaces/*"],
+      "@core-services/*": ["./src/app/core/services/*"],
+      "@core-state/*": ["./src/app/core/state/*"],
+      "@core-utils/*": ["./src/app/core/utils/*"],
+      "@core/*": ["./src/app/core/*"],
+
+      "@routes-guards/*": ["./src/app/routes/guards/*"],
+      "@routes/*": ["./src/app/routes/*"],
+
+      "@ui-styles/*": ["./src/app/ui/styles/*"],
+      "@ui/*": ["./src/app/ui/*"],
+    },
+
+    /* Bundler mode */
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"]
+}

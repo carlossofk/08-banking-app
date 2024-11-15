@@ -1,0 +1,20 @@
+@use "../variables.scss" as variables;
+
+@mixin button-primary {
+    cursor: pointer;
+    padding: 10px 48px;
+    border: none;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+    color: #FFFFFF;
+    background: variables.$primary-gradient;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+        background: linear-gradient(79.04deg, #2754C8 50%, #110F72 116.1%);
+    }
+}

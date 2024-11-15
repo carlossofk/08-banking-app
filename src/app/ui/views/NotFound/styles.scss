@@ -1,0 +1,15 @@
+@use '../../styles/variables.scss' as variables;
+
+.not-found {
+  background: variables.$primary-gradient;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+
+  &__title {
+    font-size: 3rem;
+    color: #ffffff;
+  }
+}

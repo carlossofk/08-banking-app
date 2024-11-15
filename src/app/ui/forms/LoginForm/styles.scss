@@ -1,0 +1,93 @@
+@use "../../styles/variables.scss" as variables;
+
+@use "../../styles/mixin/reset-styles.scss" as reset-mixin;
+@use "../../styles/mixin/buttons.scss" as button-mixin;
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 24px;
+    gap: 20px;
+
+    width: 500px;
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__main {
+        width: 100%;
+        padding: 1.6rem 2rem;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        margin-inline: auto;
+    }
+
+    &__fieldset {
+        @include reset-mixin.reset-fieldset;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 30px 0px;
+        width: 100%;
+    }
+
+    &__button {
+        @include button-mixin.button-primary;
+    }
+}
+
+.header-login {
+
+    &__title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 30px;
+        text-align: center;
+        letter-spacing: 0.1px;
+        background: variables.$primary-gradient;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__container-logo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__subtitle {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+        text-align: center;
+        letter-spacing: 0.1px;
+        background: variables.$primary-gradient;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__logo {
+        object-fit: contain;
+        width: 50px;
+        height: 50px;
+    }
+
+
+}
