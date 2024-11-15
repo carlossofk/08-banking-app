@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import {  DINHeader } from '@core/interfaces/api/request-response';
+import { environment } from 'src/environment/environment';
 
 
-export const dinHeaderMapper = (dinheader: Pick<DINHeader, 'ip' | 'llaveSimetrica' | 'vectorInicializacion'>): DINHeader => {
+export const dinHeaderMapper = (dinheader: Pick<DINHeader, 'ip'>): DINHeader => {
   const dispositivo = /Mobi|Android/i.test(navigator.userAgent) ? 'Mobile' : 'PC';
   const idioma = navigator.language || 'es';
   const uuid = uuidv4();
@@ -14,7 +15,7 @@ export const dinHeaderMapper = (dinheader: Pick<DINHeader, 'ip' | 'llaveSimetric
     uuid:                 uuid,
     ip:                   dinheader.ip || 'localhost',
     horaTransaccion:      horaTransaccion,
-    llaveSimetrica:       dinheader.llaveSimetrica,
-    vectorInicializacion: dinheader.vectorInicializacion,
+    llaveSimetrica:       environment.KEY_LLAVESIMETRICA,       
+    vectorInicializacion: environment.KEY_VECTORINICIALIZACION,
   };
 };

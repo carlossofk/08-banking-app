@@ -20,8 +20,6 @@ export const LoginUserService = async({ userName, password }: Parameter)  => {
 
   const dinHeader = dinHeaderMapper({
     ip: 'localhost', 
-    llaveSimetrica: '',       
-    vectorInicializacion: '',
   });
 
   const dinBody = loginBodyMapper({ username: userName, password });

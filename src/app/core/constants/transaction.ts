@@ -1,0 +1,10 @@
+export enum DEPOSIT_TYPE {
+  BRANCH = 'BRANCH',
+  ACCOUNT = 'ACCOUNT',
+  ATM = 'ATM',
+}
+
+export enum PURCHASE_TYPE {
+  PHYSICAL = 'PHYSICAL',
+  ONLINE = 'ONLINE',
+}

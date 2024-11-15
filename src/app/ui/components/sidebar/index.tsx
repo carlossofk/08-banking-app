@@ -5,6 +5,7 @@ import './styles.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { GiPayMoney } from 'react-icons/gi';
+import { BiSolidPurchaseTag } from 'react-icons/bi';
 
 const paths = {
   dashboard: {
@@ -14,6 +15,10 @@ const paths = {
   deposit: {
     name: 'Deposit Money',
     path: '/home/deposit',
+  },
+  purchase: {
+    name: 'Purchase',
+    path: '/home/purchase',
   },
   withdraw: {
     name: 'Withdraw Money',
@@ -49,6 +54,13 @@ export const Sidebar = () => {
           >
             <GiPayMoney className="sidebar__icon" />
             {!isCollapsed && <span className='sidebar__label'>Deposit Money</span>}
+          </Link>
+          <Link 
+            to="/home/purchase"
+            className={`sidebar__item ${paths.purchase.path == location.pathname ? 'sidebar__item--active' : ''}`} 
+          >
+            <BiSolidPurchaseTag className="sidebar__icon"  />
+            {!isCollapsed && <span className='sidebar__label'>Purchase</span>}
           </Link>
           <Link 
             to="/home/withdraw"
