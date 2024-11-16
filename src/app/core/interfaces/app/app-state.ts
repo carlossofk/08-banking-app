@@ -1,4 +1,4 @@
-import { IAccountInfo } from '@core-interfaces/shared/account';
+import { IAccountInfo } from '@core-interfaces/app/account';
 import { AccountPayloads } from './account-reducer';
 
 export interface IAppContext {

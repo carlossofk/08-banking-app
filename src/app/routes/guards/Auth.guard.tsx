@@ -3,7 +3,7 @@ import {  Navigate } from 'react-router-dom';
 
 import { COOKIES_TYPES } from '@core-constants/cookie';
 import { useAuth } from '@core-hooks/hook-auth/useAuth';
-import { RolUser } from '@core-interfaces/shared/user';
+import { RolUser } from '@core-interfaces/auth/user';
 import { getCookie } from '@core-utils/handle-cookie';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 export const AuthGuard = ({ children, rolAccepted }: Props) => {
 
-  const {  user } = useAuth();
+  const { user } = useAuth();
   const userRols = user?.role;
   
   const token = useMemo(() => getCookie(COOKIES_TYPES.TOKEN_API), []);

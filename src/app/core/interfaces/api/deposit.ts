@@ -8,7 +8,7 @@ export interface IDeposit {
 }
 
 // ==> Response Types
-export interface IDespositResponse <T> {
+export interface IDepositResponse <T> {
   cuentaOrigen: string;
   saldoActual:  number;
   detalle:      T;

@@ -1,4 +1,4 @@
-import { IUser } from '@core-interfaces/shared/user';
+import { IUser } from '@core-interfaces/auth/user';
 
 export enum SessionActions  {
     LOGIN = 'LOGIN',

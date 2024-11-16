@@ -1,4 +1,4 @@
-import { ISession } from '@core-interfaces/shared/session';
+import { ISession } from './session';
 import { SessionPayloads } from './session-reducer';
 
 export interface IAuthContext {

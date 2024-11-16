@@ -5,13 +5,14 @@ import { PURCHASE_TYPE } from '@core-constants/transaction';
 
 interface PurchaseFormProps {
   handleSubmitForm: (type: PURCHASE_TYPE, data: { amount: number;  }) => void;
+  loadingSubmit: boolean;
 }
 
 interface FormValues {
   amount: number;
 }
 
-const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm }) => {
+const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSubmit }) => {
   const [ purchaseType, setPurchaseType ] = useState<PURCHASE_TYPE>(PURCHASE_TYPE.PHYSICAL);
   const { 
     register, 
@@ -73,7 +74,13 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm }) => {
        
 
         {/* Botón de Enviar */}
-        <button type="submit" className="purchase-form__button">Submit</button>
+        <button 
+          className="purchase-form__button"
+          disabled={loadingSubmit}
+          type="submit" 
+        >
+            Submit
+        </button>
       </form>
     </section>
   );

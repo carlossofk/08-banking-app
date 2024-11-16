@@ -25,8 +25,8 @@ export const useAuth = () => {
 
     // ==> Save token in cookie
     const dataLogin= result.data;
-   
-
+    setKeySessionStorage(SESSION_STORAGE_KEYS.ACCOUNT_INFO, JSON.stringify(dataLogin.cuentas));
+    
     // ==> Update state
     dispatch(loginSession({ 
       user: {
@@ -42,9 +42,6 @@ export const useAuth = () => {
   };
 
   const logoutUser = () => {
-    removeKeySessionStorage(SESSION_STORAGE_KEYS.USER);
-    removeKeySessionStorage(SESSION_STORAGE_KEYS.TOKEN_API);
-    removeCookie(COOKIES_TYPES.TOKEN_API);
     dispatch(logoutSession());
     navigate('/', { replace: true });
   };
@@ -60,6 +57,7 @@ export const useAuth = () => {
     
     removeKeySessionStorage(SESSION_STORAGE_KEYS.USER);
     removeKeySessionStorage(SESSION_STORAGE_KEYS.TOKEN_API);
+    removeKeySessionStorage(SESSION_STORAGE_KEYS.ACCOUNT_INFO);
     removeCookie(COOKIES_TYPES.TOKEN_API);
     
   },[ state.token, state.user ]); 

@@ -1,47 +1,55 @@
 import { AccountActions, AccountPayloads } from '@core-interfaces/app/account-reducer';
-import { IAccountInfo } from '@core-interfaces/shared/account';
+import { IAccountInfo } from '@core-interfaces/app/account';
 
 // ==> Cases State
 export const accountCases = {
-  // [AccountActions.GET_ACCOUNT_INFO]: (state: IAccountInfo, payload: AccountPayloads['GET_ACCOUNT_INFO']): IAccountInfo => {
-  //   return {
-  //     ...state,
-  //     ...payload,
-  //   };
-  // },
-
-  [AccountActions.DEPOSIT_BRANCH]: (state: IAccountInfo, payload:AccountPayloads['DEPOSIT_BRANCH']): IAccountInfo => {	
+  [AccountActions.GET_ACCOUNT_SESSION_INFO]: (state: IAccountInfo, payload:AccountPayloads['GET_ACCOUNT_SESSION_INFO']): IAccountInfo => {
     return {
       ...state,
-      balance: payload.balance,
+      bankAccounts: payload.accountInfo,
+    };
+    
+  },  
+
+  [AccountActions.DEPOSIT]: (state: IAccountInfo, payload:AccountPayloads['DEPOSIT']): IAccountInfo => {
+    const searchedAccount = state?.bankAccounts?.find((account) => account.number === payload.accountNumber);
+    if(!searchedAccount) {
+      return {
+        ...state,
+      };
+    }
+    
+    const bankAccountsUpdated = state.bankAccounts.map((account) => {
+      if(account.number === payload.accountNumber) {
+        return { ...searchedAccount,  amount: payload.newAmout };
+      }
+      return account;
+    });
+    return {
+      ...state,
+      bankAccounts: bankAccountsUpdated,
     };
   },
 
-  [AccountActions.DEPOSIT_ACCOUNT]: (state: IAccountInfo, payload:AccountPayloads['DEPOSIT_ACCOUNT']): IAccountInfo => {	
-    return {
-      ...state,
-      balance: payload.balance,
-    };
-  },
+  [AccountActions.PURCHASE]: (state: IAccountInfo, payload:AccountPayloads['PURCHASE']): IAccountInfo => {	
 
-  [AccountActions.DEPOSIT_ATM]: (state: IAccountInfo, payload:AccountPayloads['DEPOSIT_ATM']): IAccountInfo => {	
-    return {
-      ...state,
-      balance: payload.balance,
-    };
-  },
+    const searchedAccount = state?.bankAccounts?.find((account) => account.number === payload.accountNumber);
+    if(!searchedAccount) {
+      return {
+        ...state,
+      };
+    }
+   
+    const bankAccountsUpdated = state.bankAccounts.map((account) => {
+      if(account.number === payload.accountNumber) {
+        return { ...searchedAccount,  amount: payload.newAmout };
+      }
+      return account;
+    });
 
-  [AccountActions.PURCHASE_ONLINE]: (state: IAccountInfo, payload:AccountPayloads['PURCHASE_ONLINE']): IAccountInfo => {	
     return {
       ...state,
-      balance: payload.balance,
-    };
-  },
-
-  [AccountActions.PURCHASE_PHYSICAL]: (state: IAccountInfo, payload:AccountPayloads['PURCHASE_PHYSICAL']): IAccountInfo => {	
-    return {
-      ...state,
-      balance: payload.balance,
+      bankAccounts: bankAccountsUpdated,
     };
   },
 

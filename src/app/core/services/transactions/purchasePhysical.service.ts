@@ -1,47 +1,43 @@
 
+import { COOKIES_TYPES } from '@core-constants/cookie';
 import { HTTP_METHODS } from '@core-constants/http-methods';
 import { urlResources } from '@core-constants/url-resources';
-import { COOKIES_TYPES } from '@core-constants/cookie';
-
 import { RequestAPI, ResponseAPI } from '@core-interfaces/api/request-response';
-import { Detalle, IDeposit, IDepositResponse } from '@core-interfaces/api/deposit';
+import { Detalle, IPurchase, IPurchaseResponse } from '@core-interfaces/api/purchase';
 
 import { dinHeaderMapper } from '@core-mappers/toApi/dinHeader.mapper';
-import { depositMapper } from '@core-mappers/toApi/depositBody.mapper';
-import { depositMapperToApp } from '@core-mappers/ApiTo/transaction.mapper';
+import { purchaseMapper } from '@core-mappers/toApi/purchaseBody.mapper';
 
 import { http } from '@core-services/generals/http';
-
-import { handleTryCatch } from '@core-utils/handle-try-catch';
 import { getCookie } from '@core-utils/handle-cookie';
-
+import { handleTryCatch } from '@core-utils/handle-try-catch';
+import { purchaseMapperToApp } from '@core-mappers/ApiTo/transaction.mapper';
 
 interface Parameter {
     accountUser:string
-    accountDestination:string,
     customerUser:string,
     amount: string;
 }
 
-export const depositAtmService = async({ amount, accountUser, accountDestination, customerUser }: Parameter)  => {
+export const purchasePhysicalService = async({ amount, accountUser, customerUser }: Parameter)  => {
 
-  const url = urlResources.depositATM;
+  const url = urlResources.purchasePhysical;
 
   const dinHeader = dinHeaderMapper({
     ip: 'localhost', 
   });
 
-  const dinBody = await depositMapper({
+  const dinBody = await purchaseMapper({
     amount, 
     accountUser, 
-    accountDestination, 
     customerUser
   });
-  const bodyRequest: RequestAPI<IDeposit> = { dinHeader, dinBody };
+
+  const bodyRequest: RequestAPI<IPurchase> = { dinHeader, dinBody };
   const token = getCookie(COOKIES_TYPES.TOKEN_API);
 
   const [ response, error ] = await handleTryCatch( 
-    http<RequestAPI<IDeposit>, ResponseAPI<IDepositResponse<Detalle>>>({
+    http<RequestAPI<IPurchase>, ResponseAPI<IPurchaseResponse<Detalle>>>({
       url, 
       method: HTTP_METHODS.POST, 
       data: bodyRequest, 
@@ -56,7 +52,7 @@ export const depositAtmService = async({ amount, accountUser, accountDestination
     };
   }
 
-  const dataMapped = await depositMapperToApp(response.data.dinBody);
+  const dataMapped = await purchaseMapperToApp(response.data.dinBody);
   return {
     ok: true,
     data: dataMapped

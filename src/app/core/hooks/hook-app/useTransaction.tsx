@@ -1,17 +1,16 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppContext } from '@core-state/app-context/AppContext';
-import { 
-  depositAccount,
-  depositATM,
-  depositBranch, 
-  purchaseOnline, 
-  purchasePhysical
-} from '@core-state/app-context/account/actions';
 import { DEPOSIT_TYPE, PURCHASE_TYPE } from '@core-constants/transaction';
-import { depositService } from '@core-services/transactions/deposit.service';
-import { purchaseService } from '@core-services/transactions/purchase.service';
+
+import { AppContext } from '@core-state/app-context/AppContext';
+import { deposit, purchase } from '@core-state/app-context/account/actions';
+
+import { depositBranchService } from '@core-services/transactions/depositBranch.service';
+import { purchaseOnlineService } from '@core-services/transactions/purchaseOnline.service';
+import { depositAccountService } from '@core-services/transactions/depositAccount.service';
+import { depositAtmService } from '@core-services/transactions/depositAtm.service';
+import { purchasePhysicalService } from '@core-services/transactions/purchasePhysical.service';
 
 export const useTransaction = () => {
 
@@ -20,7 +19,7 @@ export const useTransaction = () => {
   const { dispatch } = useContext(AppContext);
 
 
-  const hadleDeposit = async ( type: DEPOSIT_TYPE, 
+  const handleDeposit = async ( type: DEPOSIT_TYPE, 
     data: {
     accountDestination: string;
     amount: number; 
@@ -28,11 +27,11 @@ export const useTransaction = () => {
     setIsLoading(true);
 
     if(type === DEPOSIT_TYPE.BRANCH) {
-      const response = await depositService({
+      const response = await depositBranchService({
         amount: `${data.amount}`,
-        accountUser: '987654321',
+        accountUser: '987654321', // TODO: Get user account
         accountDestination: data.accountDestination,
-        customerUser: 'carlos_vip'
+        customerUser: 'carlos_vip' // TODO: Get user customer
       });
 
       if(!response.ok || !response.data) {
@@ -40,18 +39,21 @@ export const useTransaction = () => {
         return;
       }
 
-      dispatch( depositBranch( { 
-        balance: response?.data?.saldoActual 
-      }));
+      dispatch( 
+        deposit( {
+          accountNumber: response?.data?.accountOrigin,
+          newAmout: response?.data?.balance
+        }) 
+      );
 
       setIsLoading(false);
       navigate('/home/dashboard');
 
-      return response?.data?.detalle;
+      return response?.data;
     }
 
     if(type === DEPOSIT_TYPE.ACCOUNT) {
-      const response = await depositService({
+      const response = await depositAccountService({
         amount: `${data.amount}`,
         accountUser: '987654321',
         accountDestination: data.accountDestination,
@@ -63,17 +65,21 @@ export const useTransaction = () => {
         return;
       }
 
-      dispatch( depositAccount( { 
-        balance: response?.data?.saldoActual 
-      }));
+      dispatch( 
+        deposit( {
+          accountNumber: response?.data?.accountOrigin,
+          newAmout: response?.data?.balance
+        } ) 
+      );
 
       setIsLoading(false);
       navigate('/home/dashboard');
-      return response?.data?.detalle;
+
+      return response?.data;
     }
 
     if(type === DEPOSIT_TYPE.ATM) {
-      const response = await depositService({
+      const response = await depositAtmService({
         amount: `${data.amount}`,
         accountUser: '987654321',
         accountDestination: data.accountDestination,
@@ -85,13 +91,17 @@ export const useTransaction = () => {
         return;
       }
 
-      dispatch( depositATM( { 
-        balance: response?.data?.saldoActual 
-      }));
+      dispatch( 
+        deposit( {
+          accountNumber: response?.data?.accountOrigin,
+          newAmout: response?.data?.balance
+        } ) 
+      );
 
       setIsLoading(false);
       navigate('/home/dashboard');
-      return response?.data?.detalle;
+
+      return response?.data;
     }
   };
 
@@ -101,29 +111,8 @@ export const useTransaction = () => {
   }) => {
     setIsLoading(true);
 
-    if(type === PURCHASE_TYPE.PHYSICAL) {
-      const response = await purchaseService ({
-        amount: `${data.amount}`,
-        accountUser: '987654321',
-        customerUser: 'carlos_vip'
-      });
-
-      if(!response.ok || !response.data) {
-        setIsLoading(false);
-        return;
-      }
-
-      dispatch( purchasePhysical( { 
-        balance: response?.data?.saldoActual 
-      }));
-
-      setIsLoading(false);
-      navigate('/home/dashboard');
-      return response?.data?.detalle;
-    }
-
     if(type === PURCHASE_TYPE.ONLINE) {
-      const response = await purchaseService({
+      const response = await purchaseOnlineService({
         amount: `${data.amount}`,
         accountUser: '987654321',
         customerUser: 'carlos_vip'
@@ -134,20 +123,42 @@ export const useTransaction = () => {
         return;
       }
 
-      dispatch( purchaseOnline( { 
-        balance: response?.data?.saldoActual 
+      dispatch( purchase( { 
+        accountNumber: response?.data?.accountOrigin,
+        newAmout: response?.data?.balance
       }));
 
       setIsLoading(false);
       navigate('/home/dashboard');
-      return response?.data?.detalle;
+      return response?.data;
+    }
+    
+    if(type === PURCHASE_TYPE.PHYSICAL) {
+      const response = await purchasePhysicalService ({
+        amount: `${data.amount}`,
+        accountUser: '987654321',
+        customerUser: 'carlos_vip'
+      });
+
+      if(!response.ok || !response.data) {
+        setIsLoading(false);
+        return;
+      }
+
+      dispatch( purchase( { 
+        accountNumber: response?.data?.accountOrigin,
+        newAmout: response?.data?.balance
+      }));
+
+      setIsLoading(false);
+      navigate('/home/dashboard');
+      return response?.data;
     }
   };
 
-
   return {
     loadingOperations: isLoading,
-    hadleDeposit,     
+    handleDeposit,     
     handlePurchase,
   }; 
 };

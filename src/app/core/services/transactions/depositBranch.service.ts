@@ -1,24 +1,29 @@
 
-import { COOKIES_TYPES } from '@core-constants/cookie';
 import { HTTP_METHODS } from '@core-constants/http-methods';
 import { urlResources } from '@core-constants/url-resources';
-import { RequestAPI, ResponseAPI } from '@core-interfaces/api/request-response';
-import { Detalle, IPurchase, IPurchaseResponse } from '@core-interfaces/api/purchase';
+import { COOKIES_TYPES } from '@core-constants/cookie';
 
-import { dinHeaderMapper } from '@core-mappers/apiTo/dinHeader.mapper';
-import { purchaseMapper } from '@core-mappers/apiTo/purchaseBody.mapper';
+import { RequestAPI, ResponseAPI } from '@core-interfaces/api/request-response';
+import { Detalle, IDeposit, IDepositResponse } from '@core-interfaces/api/deposit';
+
+import { dinHeaderMapper } from '@core-mappers/toApi/dinHeader.mapper';
+import { depositMapper } from '@core-mappers/toApi/depositBody.mapper';
+import { depositMapperToApp } from '@core-mappers/ApiTo/transaction.mapper';
 
 import { http } from '@core-services/generals/http';
-import { getCookie } from '@core-utils/handle-cookie';
+
 import { handleTryCatch } from '@core-utils/handle-try-catch';
+import { getCookie } from '@core-utils/handle-cookie';
+
 
 interface Parameter {
     accountUser:string
+    accountDestination:string,
     customerUser:string,
     amount: string;
 }
 
-export const purchaseService = async({ amount, accountUser, customerUser }: Parameter)  => {
+export const depositBranchService = async({ amount, accountUser, accountDestination, customerUser }: Parameter)  => {
 
   const url = urlResources.depositBranch;
 
@@ -26,17 +31,17 @@ export const purchaseService = async({ amount, accountUser, customerUser }: Para
     ip: 'localhost', 
   });
 
-  const dinBody = await purchaseMapper({
+  const dinBody = await depositMapper({
     amount, 
     accountUser, 
+    accountDestination, 
     customerUser
   });
-
-  const bodyRequest: RequestAPI<IPurchase> = { dinHeader, dinBody };
+  const bodyRequest: RequestAPI<IDeposit> = { dinHeader, dinBody };
   const token = getCookie(COOKIES_TYPES.TOKEN_API);
 
   const [ response, error ] = await handleTryCatch( 
-    http<RequestAPI<IPurchase>, ResponseAPI<IPurchaseResponse<Detalle>>>({
+    http<RequestAPI<IDeposit>, ResponseAPI<IDepositResponse<Detalle>>>({
       url, 
       method: HTTP_METHODS.POST, 
       data: bodyRequest, 
@@ -51,8 +56,9 @@ export const purchaseService = async({ amount, accountUser, customerUser }: Para
     };
   }
 
+  const dataMapped = await depositMapperToApp(response.data.dinBody);
   return {
     ok: true,
-    data: response.data.dinBody
+    data: dataMapped
   };
 };

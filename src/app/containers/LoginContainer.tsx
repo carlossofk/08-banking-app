@@ -8,7 +8,8 @@ export const LoginContainer = () => {
 
   if( user ) {
     return ( 
-      <Navigate to="/home" replace /> );
+      <Navigate to="/home" replace />
+    );
   };
 
   return (

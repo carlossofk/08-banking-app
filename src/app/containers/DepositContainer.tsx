@@ -3,12 +3,12 @@ import { DepositForm } from '@ui/forms/DepositForm';
 import { PanelLayout } from '@ui/layouts/PanelLayout';
 
 export const DepositContainer = () => {
-  const { hadleDeposit, loadingOperations } = useTransaction();
+  const { handleDeposit, loadingOperations } = useTransaction();
 
   return (
     <PanelLayout>
       <DepositForm 
-        handleSubmitForm={hadleDeposit} 
+        handleSubmitForm={handleDeposit} 
         isLoadingSubmit={loadingOperations}
       />
     </PanelLayout>

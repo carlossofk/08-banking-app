@@ -1,4 +1,4 @@
-import { ISession } from '@core-interfaces/shared/session';
+import { ISession } from '@core-interfaces/auth/session';
 import { SessionActions, SessionPayloads } from '@core/interfaces/auth/session-reducer';
 
 // ==> Cases State

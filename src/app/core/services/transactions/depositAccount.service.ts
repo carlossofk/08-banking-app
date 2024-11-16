@@ -1,15 +1,20 @@
 
 import { HTTP_METHODS } from '@core-constants/http-methods';
 import { urlResources } from '@core-constants/url-resources';
-import { RequestAPI, ResponseAPI } from '@core-interfaces/api/request-response';
-import { dinHeaderMapper } from '@core-mappers/apiTo/dinHeader.mapper';
-import { handleTryCatch } from '@core-utils/handle-try-catch';
-
-import { http } from '../generals/http';
-import { depositMapper } from '@core-mappers/apiTo/depositBody.mapper';
-import { Detalle, IDeposit, IDespositResponse } from '@core-interfaces/api/deposit';
-import { getCookie } from '@core-utils/handle-cookie';
 import { COOKIES_TYPES } from '@core-constants/cookie';
+
+import { RequestAPI, ResponseAPI } from '@core-interfaces/api/request-response';
+import { Detalle, IDeposit, IDepositResponse } from '@core-interfaces/api/deposit';
+
+import { dinHeaderMapper } from '@core-mappers/toApi/dinHeader.mapper';
+import { depositMapper } from '@core-mappers/toApi/depositBody.mapper';
+import { depositMapperToApp } from '@core-mappers/ApiTo/transaction.mapper';
+
+import { http } from '@core-services/generals/http';
+
+import { handleTryCatch } from '@core-utils/handle-try-catch';
+import { getCookie } from '@core-utils/handle-cookie';
+
 
 interface Parameter {
     accountUser:string
@@ -18,9 +23,9 @@ interface Parameter {
     amount: string;
 }
 
-export const depositService = async({ amount, accountUser, accountDestination, customerUser }: Parameter)  => {
+export const depositAccountService = async({ amount, accountUser, accountDestination, customerUser }: Parameter)  => {
 
-  const url = urlResources.depositBranch;
+  const url = urlResources.depositAccount;
 
   const dinHeader = dinHeaderMapper({
     ip: 'localhost', 
@@ -36,7 +41,7 @@ export const depositService = async({ amount, accountUser, accountDestination, c
   const token = getCookie(COOKIES_TYPES.TOKEN_API);
 
   const [ response, error ] = await handleTryCatch( 
-    http<RequestAPI<IDeposit>, ResponseAPI<IDespositResponse<Detalle>>>({
+    http<RequestAPI<IDeposit>, ResponseAPI<IDepositResponse<Detalle>>>({
       url, 
       method: HTTP_METHODS.POST, 
       data: bodyRequest, 
@@ -51,8 +56,9 @@ export const depositService = async({ amount, accountUser, accountDestination, c
     };
   }
 
+  const dataMapped = await depositMapperToApp(response.data.dinBody);
   return {
     ok: true,
-    data: response.data.dinBody
+    data: dataMapped
   };
 };
