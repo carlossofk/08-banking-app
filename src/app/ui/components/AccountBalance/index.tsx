@@ -20,8 +20,8 @@ export const AccountBalance = ({ bankAccounts }: Props) => {
   return (
     <section>
       {bankAccounts?.map((account, index) => (
-        <article className="account-balance"> 
-          <div className="account-balance__wrapper" key={account.id}>
+        <article className="account-balance" key={account.id}> 
+          <div className="account-balance__wrapper">
             <div className="account-balance__wrapper-text account-balance__wrapper-text--center">
               <h3 className='account-balance__account-title'>Account Number</h3>
               <p className='account-balance__account-number'>{account.number}</p>	

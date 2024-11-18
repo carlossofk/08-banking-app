@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './styles.scss';
 
 interface WithdrawalFormProps {
-  onSubmit: (data: { amount: number }) => void;
+  handleSubmitForm: (amount: number) => void;
+  loadingSubmit: boolean;
 }
 
 interface FormValues {
   amount: number;
 }
 
-export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ onSubmit }) => {
+export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm, loadingSubmit }) => {
 
   const [ transactionFee ] = useState(1); 
   const { 
     register, 
     handleSubmit, 
-    formState: { errors } 
+    reset,
+    formState: { errors , isSubmitSuccessful } 
   } = useForm<FormValues>();
 
   const submitHandler: SubmitHandler<FormValues> = (data) => {
-    onSubmit({ amount: data.amount });
+    handleSubmitForm(data.amount);
   };
 
-
+  useEffect(() => {
+    reset();
+  }, [ reset, isSubmitSuccessful ]);
+  
   return (
     <section className="withdrawal-form">
 
@@ -50,7 +55,11 @@ export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ onSubmit }) => {
           <p className="withdrawal-form__text">Transaction Fee: <strong>${transactionFee}</strong></p>
         </div>
 
-        <button type="submit" className="withdrawal-form__button">
+        <button
+          type="submit" 
+          className="withdrawal-form__button"
+          disabled={loadingSubmit}
+        >
           Submit
         </button>
       </form>

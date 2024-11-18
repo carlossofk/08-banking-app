@@ -53,4 +53,25 @@ export const accountCases = {
     };
   },
 
+  [AccountActions.WITHDRAW]: (state: IAccountInfo, payload:AccountPayloads['WITHDRAW']): IAccountInfo => {
+    const searchedAccount = state?.bankAccounts?.find((account) => account.number === payload.accountNumber);
+    if(!searchedAccount) {
+      return {
+        ...state,
+      };
+    }
+
+    const bankAccountsUpdated = state.bankAccounts.map((account) => {
+      if(account.number === payload.accountNumber) {
+        return { ...searchedAccount,  amount: payload.newAmout };
+      }
+      return account;
+    });
+
+    return {
+      ...state,
+      bankAccounts: bankAccountsUpdated,
+    };
+  },  
+
 };

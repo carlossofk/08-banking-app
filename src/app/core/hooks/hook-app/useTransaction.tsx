@@ -4,19 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { DEPOSIT_TYPE, PURCHASE_TYPE } from '@core-constants/transaction';
 
 import { AppContext } from '@core-state/app-context/AppContext';
-import { deposit, purchase } from '@core-state/app-context/account/actions';
+import { deposit, purchase, withdraw } from '@core-state/app-context/account/actions';
 
 import { depositBranchService } from '@core-services/transactions/depositBranch.service';
 import { purchaseOnlineService } from '@core-services/transactions/purchaseOnline.service';
 import { depositAccountService } from '@core-services/transactions/depositAccount.service';
 import { depositAtmService } from '@core-services/transactions/depositAtm.service';
 import { purchasePhysicalService } from '@core-services/transactions/purchasePhysical.service';
+import { withdrawService } from '@core-services/transactions/withdraw.service';
 
 export const useTransaction = () => {
 
-  const [ isLoading, setIsLoading ] = useState(false);
-  const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
+  const [ isLoading, setIsLoading ] = useState(false);
 
 
   const handleDeposit = async ( type: DEPOSIT_TYPE, 
@@ -156,9 +157,33 @@ export const useTransaction = () => {
     }
   };
 
+  const handleWithdraw = async (amount: number) => {
+    setIsLoading(true);
+    const response = await withdrawService({
+      amount: `${amount}`, 
+      accountUser: '987654321',
+      customerUser: 'carlos_vip' 
+    });
+
+    if(!response.ok || !response.data) {
+      setIsLoading(false);
+      return;
+    }
+
+    dispatch(withdraw({
+      accountNumber: response?.data?.accountOrigin,
+      newAmout: response?.data?.balance
+    }));
+
+    setIsLoading(false);
+    navigate('/home/dashboard');
+    return response?.data;
+  };
+
   return {
     loadingOperations: isLoading,
     handleDeposit,     
     handlePurchase,
+    handleWithdraw
   }; 
 };

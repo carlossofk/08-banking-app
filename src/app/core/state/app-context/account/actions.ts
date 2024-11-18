@@ -14,3 +14,8 @@ export const purchase = (payload:AccountPayloads ['PURCHASE'] ) => ({
   type: AccountActions.PURCHASE,
   payload
 });
+
+export const withdraw = (payload:AccountPayloads ['WITHDRAW'] ) => ({
+  type: AccountActions.WITHDRAW,
+  payload
+});
