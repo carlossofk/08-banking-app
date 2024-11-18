@@ -1,4 +1,5 @@
 
+export * from './format';
 export * from './handle-cookie';
 export * from './handle-session-client';
 export * from './handle-try-catch';

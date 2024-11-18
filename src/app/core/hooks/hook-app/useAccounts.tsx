@@ -7,7 +7,7 @@ import { getAccountSessionInfo } from '@core-state/app-context/account/actions';
 import { AuthContext } from '@core-state/auth-context/AuthContext';
 
 const useAccounts = () => {
-  const { state,dispatch } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
   const { state: authState } = useContext(AuthContext);
 
   // ===> Get account info from session storage
@@ -18,7 +18,8 @@ const useAccounts = () => {
     const accountInfoParsed: AccountBank[] = JSON.parse(accountInfo);
     dispatch(getAccountSessionInfo({ accountInfo: accountInfoParsed }));
     
-  },[ dispatch ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[  ]);
 
   // ===> Get account info from session storage
   useEffect(() => {

@@ -1,32 +1,91 @@
+@use '../../styles/variables' as variables;
+
+
 .account-balance {
   padding: 10px 10px;
   border-radius: 32px;
   background-color: #12113e;
   opacity: 0.4;
-  background-image:
-    repeating-radial-gradient(circle at 0 0, transparent 0, #0829cfc8 10px),
-    repeating-linear-gradient(to bottom, #0b048bc9, #1967a6c9);
+  background-color: variables.$primary-gradient;
+  background-image: url('../../../../assets/backgrounds/background-account-balance.svg'),
+    variables.$primary-gradient ;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 1;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0px 20px;
+  }
 
   &__wrapper-text {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: end;
-    padding: 0px 20px;
+
+    &--center {
+      align-items: center;
+      justify-content: center;
+    }
+
+    &--row {
+      display: flex;
+      flex-direction: row;
+    }
   }
 
-  &__title {
-    font-size: 1.5rem;
-    color: #ffffff;
-    font-weight: bold;
-  }
-
-  &__amount {
+  &__account-title {
     font-style: normal;
-    font-weight: 700;
-    font-size: 22px;
-    text-align: right;
+    line-height: 20px;
+    font-weight: 400;
+    font-size: 14px;
     letter-spacing: 0.1px;
     color: #FFFFFF;
   }
+
+  &__account-number {
+    font-style: normal;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 36px;
+    text-align: right;
+    letter-spacing: 0.1px;
+    color: #FFFFFF;
+    margin: 5px
+  }
+
+  &__toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #FFFFFF;
+
+    &:hover {
+      color: #979797;
+    }
+  }
+
+  &__title {
+    font-style: normal;
+    line-height: 24px;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.1px;
+    color: #FFFFFF;
+  }
+
+  &__account-amount {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 48px;
+    text-align: right;
+    color: #FFFFFF;
+    margin: 10px
+  }
+
+
+
+
 }
