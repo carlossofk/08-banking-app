@@ -1,0 +1,61 @@
+@use '../../styles/mixin/buttons.scss' as mixin-buttons;
+
+.transaction-details {
+  border-radius: 8px;
+  padding: 0px 10px 10px;
+  min-width: 400px;
+  margin: 0 auto;
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+
+    &__icon {
+      font-size: 24px;
+      color: #1731c4;
+      margin-right: 8px;
+    }
+
+    &__title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #000000;
+      text-align: center;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+
+    &__label {
+      font-weight: 600;
+      color: #000000;
+    }
+
+    &__value {
+      font-weight: 300;
+      color: #000000;
+    }
+  }
+
+}
+
+.transaction__actions {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  &--finalize {
+    @include mixin-buttons.button-primary;
+  }
+}

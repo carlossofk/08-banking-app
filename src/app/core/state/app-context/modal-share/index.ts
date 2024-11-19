@@ -31,15 +31,14 @@ export const modalShareCases = {
   
   [ModalShareActions.SET_SHARE_MODAL_CONTENT]: (state: IModalShare, payload:ModalSharePayloads['SET_SHARE_MODAL_CONTENT']): IModalShare => {
     const modalShareUpdated = {
-      ...state.modalShare,
+      ...state.modalShareContent,
       [payload.modaltype]: {
-        ...state.modalShare[payload.modaltype],
         ...payload.content,
       },
     };
     return {
       ...state,
-      modalShare: modalShareUpdated,
+      modalShareContent: modalShareUpdated,
     };
   },
   

@@ -5,7 +5,6 @@ import { closeShareModalAction, openShareModalAction, setShareModalContentAction
 
 export const useModalShare = () => {
   const { dispatch, state } = useContext(AppContext);
-  console.log({ modalShare: state.modalShare });
 
   const openShareModal = (typeModal: MODAL_TYPE) => {
     dispatch(
@@ -30,6 +29,7 @@ export const useModalShare = () => {
 
   return {	
     modalState: state.modalShare,
+    modalContent: state?.modalShareContent,
     openShareModal, 
     closeShareModal,
     setDataShareModal

@@ -14,10 +14,9 @@ detalle:      T;
 }
 
 export interface Detalle {
-montoDeposito:    number;
-costoDeposito:    number;
-tipoDeposito:     string;
-cuentaOrigen:     string;
-cuentaDestino:    string;
-fechaTransaccion: Date;
+montoCompra:       number;
+costoCompra:       number;
+tipoCompra:        string;
+cuentaOrigen:      string;
+fechaTransaccion:  Date;
 }

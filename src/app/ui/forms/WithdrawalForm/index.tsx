@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { FaSpinner } from 'react-icons/fa';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import './styles.scss';
 import { useModalShare } from '@core-hooks/hook-app/useModalShare';
 import { MODAL_TYPE } from '@core-interfaces/app/modal-share';
 import { ITransactionMapperToApp } from '@core-interfaces/shared/transaction-mappers';
-import { FaSpinner } from 'react-icons/fa';
+import './styles.scss';
 
 interface WithdrawalFormProps {
   handleSubmitForm: (amount: number) => Promise<Omit<ITransactionMapperToApp, 'accountDestination'> | undefined>;
@@ -39,8 +39,10 @@ export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm
   };
 
   useEffect(() => {
-    reset();
-  }, [ reset, isSubmitSuccessful ]);
+    if(!loadingSubmit){
+      reset();
+    }
+  }, [ reset, isSubmitSuccessful, loadingSubmit ]);
   
   return (
     <section className="withdrawal-form">

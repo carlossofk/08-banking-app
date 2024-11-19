@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import './styles.scss';
-import { PURCHASE_TYPE } from '@core-constants/transaction';
 import { FaSpinner } from 'react-icons/fa';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { PURCHASE_TYPE } from '@core-constants/transaction';
+import { useModalShare } from '@core-hooks/hook-app/useModalShare';
 
+import './styles.scss';
+import { MODAL_TYPE } from '@core-interfaces/app/modal-share';
+import { ITransactionMapperToApp } from '@core-interfaces/shared/transaction-mappers';
 interface PurchaseFormProps {
-  handleSubmitForm: (type: PURCHASE_TYPE, data: { amount: number;  }) => void;
+  handleSubmitForm: (type: PURCHASE_TYPE, data: { amount: number }) => Promise<ITransactionMapperToApp | undefined>
   loadingSubmit: boolean;
 }
 
@@ -14,6 +17,7 @@ interface FormValues {
 }
 
 const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSubmit }) => {
+  const { openShareModal, setDataShareModal } = useModalShare();
   const [ purchaseType, setPurchaseType ] = useState<PURCHASE_TYPE>(PURCHASE_TYPE.PHYSICAL);
   const { 
     register, 
@@ -26,13 +30,23 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSu
     setPurchaseType(e.target.value as PURCHASE_TYPE);
   };
 
-  const submitHandler: SubmitHandler<FormValues> = (data) => {
-    handleSubmitForm(purchaseType,{ amount: data.amount });
+  const submitHandler: SubmitHandler<FormValues> = async (data) => {
+    const resp = await handleSubmitForm(purchaseType,{ amount: data.amount });
+    setDataShareModal(MODAL_TYPE.MODAL_TRANSACTION, { 
+      accountOrigin: resp?.accountOrigin,
+      amountTransaction: resp?.amountTransaction,
+      balance: resp?.balance,
+      taxTransaction: resp?.taxTransaction,
+      typeTransaction: resp?.typeTransaction
+    });
+    openShareModal(MODAL_TYPE.MODAL_TRANSACTION);
   };
 
   useEffect(() => {
-    reset();
-  }, [ purchaseType, reset, isSubmitSuccessful ]);
+    if(!loadingSubmit){
+      reset();
+    }
+  }, [ reset, isSubmitSuccessful, loadingSubmit ]);
 
   return (
     <section className="purchase-form">
@@ -49,8 +63,8 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSu
             disabled={loadingSubmit}
             onChange={handleTypeChange}
           >
-            <option value="physical">Purchase in Physical Store</option>
-            <option value="online">Purchase on Website</option>
+            <option value={PURCHASE_TYPE.PHYSICAL}>Purchase in Physical Store</option>
+            <option value={PURCHASE_TYPE.ONLINE}>Purchase on Website</option>
           </select>
         </div>
 
