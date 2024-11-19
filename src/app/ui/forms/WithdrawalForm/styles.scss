@@ -56,5 +56,24 @@
 
   &__button {
     @include mixin-buttons.button-primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__spinner {
+    font-size: inherit;
+    animation: spin 1s linear infinite;
+    margin-right: 1rem;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
   }
 }

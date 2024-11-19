@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './styles.scss';
 import { DEPOSIT_TYPE } from '@core-constants/transaction';
+import { FaSpinner } from 'react-icons/fa';
+import { ITransactionMapperToApp } from '@core-interfaces/shared/transaction-mappers';
+import { useModalShare } from '@core-hooks/hook-app/useModalShare';
+import { MODAL_TYPE } from '@core-interfaces/app/modal-share';
 
 
 interface FormValues {
@@ -10,11 +14,13 @@ interface FormValues {
 }
 
 interface DepositFormProps {
-  handleSubmitForm: (type: DEPOSIT_TYPE, data: { accountDestination: string; amount: number }) => void;
+  handleSubmitForm: (type: DEPOSIT_TYPE, data: { accountDestination: string; amount: number; }) => Promise<ITransactionMapperToApp | undefined>
   isLoadingSubmit: boolean;
 }
 
 export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLoadingSubmit }) => {
+  
+  const { openShareModal, setDataShareModal } = useModalShare();
   const [ depositType, setDepositType ] = useState<DEPOSIT_TYPE>(DEPOSIT_TYPE.BRANCH);
   const { register, handleSubmit, formState: { errors, isSubmitSuccessful }, reset } = useForm<FormValues>();
 
@@ -22,16 +28,27 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
     setDepositType(e.target.value as DEPOSIT_TYPE);
   };
 
-  const submitHandler: SubmitHandler<FormValues> = (data) => {
-    handleSubmitForm(depositType, { 
+  const submitHandler: SubmitHandler<FormValues> = async(data) => {
+    const resp = await handleSubmitForm(depositType, { 
       accountDestination: data.accountDestination, 
       amount: data.amount,
     });
+
+    setDataShareModal(MODAL_TYPE.MODAL_TRANSACTION, { 
+      accountOrigin: resp?.accountOrigin,
+      amountTransaction: resp?.amountTransaction,
+      balance: resp?.balance,
+      taxTransaction: resp?.taxTransaction,
+      typeTransaction: resp?.typeTransaction
+    });
+    openShareModal(MODAL_TYPE.MODAL_TRANSACTION);
   };
 
   useEffect(() => {
-    reset();
-  }, [ depositType, reset, isSubmitSuccessful ]);
+    if(!isLoadingSubmit){
+      reset();
+    }
+  }, [ reset, isSubmitSuccessful, isLoadingSubmit ]);
 
   return (
     <section className="deposit-form">
@@ -45,6 +62,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
             className="deposit-form__select"
             value={depositType}
             onChange={handleTypeChange}
+            disabled={isLoadingSubmit}
           >
             <option value={DEPOSIT_TYPE.BRANCH}>Deposit from Branch</option>
             <option value={DEPOSIT_TYPE.ATM}>Deposit from ATM</option>
@@ -60,6 +78,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
             type="text"
             className="deposit-form__input"
             placeholder="Enter account number"
+            disabled={isLoadingSubmit}
             {...register('accountDestination', {
               required: 'Account number is required',
               pattern: {
@@ -83,6 +102,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
             type="number"
             className="deposit-form__input"
             placeholder="Enter amount"
+            disabled={isLoadingSubmit}
             {...register('amount', { 
               required: 'Amount is required',
               min: {
@@ -99,7 +119,8 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
           className="deposit-form__button"
           disabled={isLoadingSubmit}
         >
-          Submit
+          {isLoadingSubmit && <FaSpinner className='deposit-form__spinner' /> }
+           Deposit
         </button>
       </form>
     </section>

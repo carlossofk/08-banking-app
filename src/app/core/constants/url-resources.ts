@@ -7,7 +7,7 @@ export const urlResources = {
 
   // ==> Deposit
   depositBranch: `${environment.apiUrl}/depositos/sucursal`,
-  depositAccount: `${environment.apiUrl}/depositos/cuenta`,
+  depositAccount: `${environment.apiUrl}/depositos/otracuenta`,
   depositATM: `${environment.apiUrl}/depositos/cajero`,
 
   // ==> Purchase
