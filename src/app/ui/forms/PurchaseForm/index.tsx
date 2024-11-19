@@ -25,12 +25,6 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSu
     setPurchaseType(e.target.value as PURCHASE_TYPE);
   };
 
-  // const calculateTotal = (amount: number): number => {
-  //   return purchaseType === PURCHASE_TYPE.ONLINE 
-  //     ? amount + 5 
-  //     : amount;
-  // };
-
   const submitHandler: SubmitHandler<FormValues> = (data) => {
     handleSubmitForm(purchaseType,{ amount: data.amount });
   };
@@ -44,7 +38,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSu
       <h2 className="purchase-form__title">Purchase</h2>
 
       <form className="purchase-form__form" onSubmit={handleSubmit(submitHandler)}>
-        {/* Tipo de Compra */}
+
         <div className="purchase-form__field">
           <label htmlFor="purchase-type" className="purchase-form__label">Purchase Type</label>
           <select
@@ -59,7 +53,6 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSu
         </div>
 
 
-        {/* Monto */}
         <div className="purchase-form__field">
           <label htmlFor="amount" className="purchase-form__label">Amount</label>
           <input
@@ -73,7 +66,6 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSu
         </div>
        
 
-        {/* Botón de Enviar */}
         <button 
           className="purchase-form__button"
           disabled={loadingSubmit}

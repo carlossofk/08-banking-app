@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './styles.scss';
 
@@ -13,7 +13,6 @@ interface FormValues {
 
 export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm, loadingSubmit }) => {
 
-  const [ transactionFee ] = useState(1); 
   const { 
     register, 
     handleSubmit, 
@@ -49,10 +48,6 @@ export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm
             placeholder="Enter amount"
           />
           {errors.amount && <span className="withdrawal-form__error">{errors.amount.message}</span>}
-        </div>
-
-        <div className="withdrawal-form__summary">
-          <p className="withdrawal-form__text">Transaction Fee: <strong>${transactionFee}</strong></p>
         </div>
 
         <button
