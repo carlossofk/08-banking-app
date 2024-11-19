@@ -1,4 +1,5 @@
 @use '../../styles/variables.scss' as variables;
+@use '../../styles/mixin/forms.scss' as mixin-forms;
 
 .deposit-form {
   &__title {
@@ -9,13 +10,7 @@
   }
 
   &__form {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    @include mixin-forms.transaction-form-container;
   }
 
   &__field {

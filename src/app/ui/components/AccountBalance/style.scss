@@ -18,6 +18,7 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 0px 20px;
+    flex-wrap: wrap;
   }
 
   &__wrapper-text {
@@ -84,8 +85,4 @@
     color: #FFFFFF;
     margin: 10px
   }
-
-
-
-
 }

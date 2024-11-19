@@ -22,21 +22,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
     setDepositType(e.target.value as DEPOSIT_TYPE);
   };
 
-  // const calculateTotal = (amount: number): number => {
-  //   switch (depositType) {
-  //   case DEPOSIT_TYPE.ATM:
-  //     return amount + 2;
-
-  //   case DEPOSIT_TYPE.ACCOUNT:
-  //     return amount + 1.5; 
-
-  //   default:
-  //     return amount;
-  //   }
-  // };
-
   const submitHandler: SubmitHandler<FormValues> = (data) => {
-    
     handleSubmitForm(depositType, { 
       accountDestination: data.accountDestination, 
       amount: data.amount,
@@ -66,7 +52,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
           </select>
         </div>
 
-        {/* Cuenta de Destino */}
+       
         <div className="deposit-form__field">
           <label htmlFor="account" className="deposit-form__label">Account Number</label>
           <input
