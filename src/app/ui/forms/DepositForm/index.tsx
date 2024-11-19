@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './styles.scss';
 import { DEPOSIT_TYPE } from '@core-constants/transaction';
+import { FaSpinner } from 'react-icons/fa';
 
 
 interface FormValues {
@@ -45,6 +46,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
             className="deposit-form__select"
             value={depositType}
             onChange={handleTypeChange}
+            disabled={isLoadingSubmit}
           >
             <option value={DEPOSIT_TYPE.BRANCH}>Deposit from Branch</option>
             <option value={DEPOSIT_TYPE.ATM}>Deposit from ATM</option>
@@ -60,6 +62,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
             type="text"
             className="deposit-form__input"
             placeholder="Enter account number"
+            disabled={isLoadingSubmit}
             {...register('accountDestination', {
               required: 'Account number is required',
               pattern: {
@@ -83,6 +86,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
             type="number"
             className="deposit-form__input"
             placeholder="Enter amount"
+            disabled={isLoadingSubmit}
             {...register('amount', { 
               required: 'Amount is required',
               min: {
@@ -99,7 +103,8 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
           className="deposit-form__button"
           disabled={isLoadingSubmit}
         >
-          Submit
+          {isLoadingSubmit && <FaSpinner className='deposit-form__spinner' /> }
+           Deposit
         </button>
       </form>
     </section>

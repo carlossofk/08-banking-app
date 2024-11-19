@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './styles.scss';
+import { useModalShare } from '@core-hooks/hook-app/useModalShare';
+import { MODAL_TYPE } from '@core-interfaces/app/modal-share';
+import { ITransactionMapperToApp } from '@core-interfaces/shared/transaction-mappers';
+import { FaSpinner } from 'react-icons/fa';
 
 interface WithdrawalFormProps {
-  handleSubmitForm: (amount: number) => void;
+  handleSubmitForm: (amount: number) => Promise<Omit<ITransactionMapperToApp, 'accountDestination'> | undefined>;
   loadingSubmit: boolean;
 }
 
@@ -13,6 +17,7 @@ interface FormValues {
 
 export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm, loadingSubmit }) => {
 
+  const { openShareModal, setDataShareModal } = useModalShare();
   const { 
     register, 
     handleSubmit, 
@@ -20,8 +25,17 @@ export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm
     formState: { errors , isSubmitSuccessful } 
   } = useForm<FormValues>();
 
-  const submitHandler: SubmitHandler<FormValues> = (data) => {
-    handleSubmitForm(data.amount);
+
+  const submitHandler: SubmitHandler<FormValues> = async (data) => {
+    const resp = await handleSubmitForm(data.amount);
+    setDataShareModal(MODAL_TYPE.MODAL_TRANSACTION, { 
+      accountOrigin: resp?.accountOrigin,
+      amountTransaction: resp?.amountTransaction,
+      balance: resp?.balance,
+      taxTransaction: resp?.taxTransaction,
+      typeTransaction: resp?.typeTransaction
+    });
+    openShareModal(MODAL_TYPE.MODAL_TRANSACTION);
   };
 
   useEffect(() => {
@@ -55,7 +69,8 @@ export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm
           className="withdrawal-form__button"
           disabled={loadingSubmit}
         >
-          Submit
+          {loadingSubmit && <FaSpinner className='withdrawal-form__spinner' /> }
+          Withdraw
         </button>
       </form>
     </section>

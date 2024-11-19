@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { DEPOSIT_TYPE, PURCHASE_TYPE } from '@core-constants/transaction';
 
 import { AppContext } from '@core-state/app-context/AppContext';
+import { AuthContext } from '@core-state/auth-context/AuthContext';
 import { deposit, purchase, withdraw } from '@core-state/app-context/account/actions';
 
 import { depositBranchService } from '@core-services/transactions/depositBranch.service';
@@ -14,9 +14,8 @@ import { purchasePhysicalService } from '@core-services/transactions/purchasePhy
 import { withdrawService } from '@core-services/transactions/withdraw.service';
 
 export const useTransaction = () => {
-
-  const { dispatch } = useContext(AppContext);
-  const navigate = useNavigate();
+  const { state: authState } = useContext(AuthContext);
+  const { dispatch, state } = useContext(AppContext);
   const [ isLoading, setIsLoading ] = useState(false);
 
 
@@ -30,9 +29,9 @@ export const useTransaction = () => {
     if(type === DEPOSIT_TYPE.BRANCH) {
       const response = await depositBranchService({
         amount: `${data.amount}`,
-        accountUser: '987654321', // TODO: Get user account
+        accountUser: `${state.bankAccounts[0].number}`,
         accountDestination: data.accountDestination,
-        customerUser: 'carlos_vip' // TODO: Get user customer
+        customerUser: `${authState.user?.userName}` 
       });
 
       if(!response.ok || !response.data) {
@@ -48,7 +47,6 @@ export const useTransaction = () => {
       );
 
       setIsLoading(false);
-      navigate('/home/dashboard');
 
       return response?.data;
     }
@@ -56,9 +54,9 @@ export const useTransaction = () => {
     if(type === DEPOSIT_TYPE.ACCOUNT) {
       const response = await depositAccountService({
         amount: `${data.amount}`,
-        accountUser: '987654321',
+        accountUser: `${state.bankAccounts[0].number}`,
         accountDestination: data.accountDestination,
-        customerUser: 'carlos_vip'
+        customerUser: `${authState.user?.userName}` 
       });
 
       if(!response.ok || !response.data) {
@@ -74,7 +72,6 @@ export const useTransaction = () => {
       );
 
       setIsLoading(false);
-      navigate('/home/dashboard');
 
       return response?.data;
     }
@@ -82,9 +79,9 @@ export const useTransaction = () => {
     if(type === DEPOSIT_TYPE.ATM) {
       const response = await depositAtmService({
         amount: `${data.amount}`,
-        accountUser: '987654321',
+        accountUser: `${state.bankAccounts[0].number}`,
         accountDestination: data.accountDestination,
-        customerUser: 'carlos_vip'
+        customerUser: `${authState.user?.userName}` 
       });
 
       if(!response.ok || !response.data) {
@@ -100,7 +97,6 @@ export const useTransaction = () => {
       );
 
       setIsLoading(false);
-      navigate('/home/dashboard');
 
       return response?.data;
     }
@@ -115,8 +111,8 @@ export const useTransaction = () => {
     if(type === PURCHASE_TYPE.ONLINE) {
       const response = await purchaseOnlineService({
         amount: `${data.amount}`,
-        accountUser: '987654321',
-        customerUser: 'carlos_vip'
+        accountUser: `${state.bankAccounts[0].number}`,
+        customerUser: `${authState.user?.userName}` 
       });
 
       if(!response.ok || !response.data) {
@@ -130,15 +126,14 @@ export const useTransaction = () => {
       }));
 
       setIsLoading(false);
-      navigate('/home/dashboard');
       return response?.data;
     }
     
     if(type === PURCHASE_TYPE.PHYSICAL) {
       const response = await purchasePhysicalService ({
         amount: `${data.amount}`,
-        accountUser: '987654321',
-        customerUser: 'carlos_vip'
+        accountUser: `${state.bankAccounts[0].number}`,
+        customerUser: `${authState.user?.userName}` 
       });
 
       if(!response.ok || !response.data) {
@@ -152,7 +147,6 @@ export const useTransaction = () => {
       }));
 
       setIsLoading(false);
-      navigate('/home/dashboard');
       return response?.data;
     }
   };
@@ -161,8 +155,8 @@ export const useTransaction = () => {
     setIsLoading(true);
     const response = await withdrawService({
       amount: `${amount}`, 
-      accountUser: '987654321',
-      customerUser: 'carlos_vip' 
+      accountUser: `${state.bankAccounts[0].number}`,
+      customerUser: `${authState.user?.userName}` 
     });
 
     if(!response.ok || !response.data) {
@@ -176,7 +170,6 @@ export const useTransaction = () => {
     }));
 
     setIsLoading(false);
-    navigate('/home/dashboard');
     return response?.data;
   };
 
