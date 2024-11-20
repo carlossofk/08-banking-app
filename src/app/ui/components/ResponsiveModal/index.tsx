@@ -19,7 +19,7 @@ export const ResponsiveModal = ({ isOpen, size, children, onClose }: ModalProps)
         onClick={(e) => e.stopPropagation()} 
       >
         {hasAnyButton && (
-          <div className='modal-buttons'>
+          <div className='modal-buttons' data-testid="responsive-modal-buttons">
             {onClose && (<IoMdClose className="modal-buttons--close" onClick={onClose} />)}
           </div>
         )}
