@@ -13,13 +13,13 @@ export const Topbar = () => {
   };
 
   return (
-    <div className="topbar">
+    <div data-testid="topbar" className="topbar">
       <div className="topbar__space"/>
       <div className="topbar__avatar-wrapper">
         <FaUserCircle className="topbar__avatar" onClick={toggleDropdown} />
         
         {isDropdownOpen && (
-          <div className="topbar__dropdown">
+          <div data-testid="topbar-dropdown" className="topbar__dropdown">
             <ul className="topbar__dropdown-list">
               <li className="topbar__dropdown-item" onClick={() => console.log('Go to Profile')}>
                 <FaUser className="topbar__dropdown-icon" />

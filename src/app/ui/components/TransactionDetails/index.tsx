@@ -3,6 +3,7 @@ import { FaMoneyCheckAlt } from 'react-icons/fa';
 import { ITransactionMapperToApp } from '@core-interfaces/shared/transaction-mappers';
 
 import './styles.scss';
+import { formatCurrency } from '@core-utils/format';
 
 interface Props {
   data?: Partial<ITransactionMapperToApp> 
@@ -44,7 +45,7 @@ export const TransactionDetails = ({ data , closeModal }: Props) => {
         </div>
         <div className="transaction-details__row">
           <span className="transaction-details__row__label">Balance:</span>
-          <span className="transaction-details__row__value">${balance.toFixed(2)}</span>
+          <span className="transaction-details__row__value">{formatCurrency(balance)}</span>
         </div>
         <div className="transaction-details__row">
           <span className="transaction-details__row__label">Transaction Type:</span>
@@ -52,16 +53,17 @@ export const TransactionDetails = ({ data , closeModal }: Props) => {
         </div>
         <div className="transaction-details__row">
           <span className="transaction-details__row__label">Tax:</span>
-          <span className="transaction-details__row__value">${taxTransaction.toFixed(2)}</span>
+          <span className="transaction-details__row__value">{formatCurrency(taxTransaction)}</span>
         </div>
         <div className="transaction-details__row">
           <span className="transaction-details__row__label">Transaction Amount:</span>
-          <span className="transaction-details__row__value">${amountTransaction.toFixed(2)}</span>
+          <span className="transaction-details__row__value">{formatCurrency(amountTransaction)}</span>
         </div>
       </div>
       <div className='transaction__actions'>
         <button 
           className='transaction__actions--finalize'
+          data-testid="transaction-details-finalize"
           onClick={handleCloseModal}
         >
           Finalize

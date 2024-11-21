@@ -37,7 +37,11 @@ export const Sidebar = () => {
   return (
     <aside className={'sidebar'}>
       <button className="sidebar__toggle" onClick={toggleSidebar}>
-        <img className="sidebar__toggle--icon" src="src/assets/logos/logo-transfer.svg" alt="Toggle Sidebar" />
+        <img 
+          className="sidebar__toggle--icon" 
+          src="src/assets/logos/logo-transfer.svg" 
+          alt="Toggle Sidebar"
+        />
       </button>
       <nav className="sidebar__nav">
         <ul className='sidebar__list'>

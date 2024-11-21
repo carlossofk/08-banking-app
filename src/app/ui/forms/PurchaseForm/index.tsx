@@ -8,7 +8,7 @@ import './styles.scss';
 import { MODAL_TYPE } from '@core-interfaces/app/modal-share';
 import { ITransactionMapperToApp } from '@core-interfaces/shared/transaction-mappers';
 interface PurchaseFormProps {
-  handleSubmitForm: (type: PURCHASE_TYPE, data: { amount: number }) => Promise<ITransactionMapperToApp | undefined>
+  handleSubmitForm: (type: PURCHASE_TYPE, data: { amount: number; }) => Promise<Omit<ITransactionMapperToApp, 'accountDestination'> | undefined>
   loadingSubmit: boolean;
 }
 
