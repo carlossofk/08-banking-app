@@ -23,8 +23,10 @@ export const InputText = <T extends FieldValues>({
 
   return (
     <div className='input-text'>
-      {label && (<label className='input-text__label'>{label}</label>)}
+      {label && (<label className='input-text__label' htmlFor={field.name}>{label}</label>)}
       <input
+        id={field.name}
+        data-testid={field.name}
         className='input-text__input'
         {...field}
         type={type} 
