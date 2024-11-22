@@ -1,32 +1,7 @@
 import { test, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-
 import { LoginForm } from '@ui/forms/LoginForm';
-
-vi.mock('@core-hooks/hook-form/useLoginForm.control', () => ({
-  useLoginFormControl: vi.fn().mockReturnValue({ 
-    formState: { errors: {} },
-    control: vi.fn(),
-    handleSubmit: vi.fn(), 
-    defaultValues: { user: '', password: '' },
-  }),
-}));
-
-vi.mock('@ui/components/FieldText', () => {
-  return {
-    InputText: vi.fn(({ label, name, control }) => {
-      return (
-        <input
-          aria-label={label}
-          name={name}
-          value={control.field?.value}
-          ref={control.field?.ref}
-          data-testid={name}
-        />
-      );
-    }),
-  };
-});
+import { renderWithReactHookForm } from 'test/mocked-functions/render-with-react-hook-form';
 
 
 describe('<LoginForm />', () => {
@@ -34,11 +9,17 @@ describe('<LoginForm />', () => {
   const handlerLoginMocked = vi.fn();
   
   test('Renders the form with all elements', () => {
-    render(
-      <LoginForm 
-        handlerLogin={handlerLoginMocked} 
-        loadSubmit={false} 
-      />
+    renderWithReactHookForm(
+      <LoginForm
+        handlerLogin={handlerLoginMocked}
+        loadSubmit={false} />,
+      {
+        toPassBack: [],
+        defaultValues: {
+          user: '',
+          password: '',
+        }
+      }
     );
 
     expect(screen.getByRole('heading', { level:1 })).toBeInTheDocument();
@@ -49,13 +30,18 @@ describe('<LoginForm />', () => {
   });
 
 
-  test('calls handlerLogin with user and password on form submit', async () => {
-    const isLoadingMocked = false;
-    render(
-      <LoginForm 
+  test('Calls handlerLogin with user and password on form submit', async () => {
+    renderWithReactHookForm(
+      <LoginForm
         handlerLogin={handlerLoginMocked}
-        loadSubmit={isLoadingMocked} 
-      />
+        loadSubmit={false} />,
+      {
+        toPassBack: [],
+        defaultValues: {
+          user: '',
+          password: '',
+        }
+      }
     );
 
     const userInput = screen.getByTestId('user') as HTMLInputElement;
@@ -68,6 +54,43 @@ describe('<LoginForm />', () => {
 
     await waitFor(() => {
       expect(handlerLoginMocked).toHaveBeenCalled();
+    });
+  });
+
+
+  test('Disables the submit button when loadSubmit is true', () => {
+    render(
+      <LoginForm 
+        handlerLogin={handlerLoginMocked}
+        loadSubmit={true} 
+      />
+    );
+  
+    const submitButton = screen.getByRole('button', { name: 'Login' });
+    expect(submitButton).toBeDisabled();
+  });
+  
+  
+  test('Displays validation errors when present', async() => {
+    renderWithReactHookForm(
+      <LoginForm
+        handlerLogin={handlerLoginMocked}
+        loadSubmit={false} />,
+      {
+        toPassBack: [],
+        defaultValues: {
+          user: '',
+          password: '',
+        }
+      }
+    );
+
+    const submitButton = screen.getByRole('button', { name: 'Login' });
+    fireEvent.click(submitButton);
+    
+    await waitFor(() => {
+      expect(screen.getByText('user is a required field')).toBeInTheDocument();
+      expect(screen.getByText('password is a required field')).toBeInTheDocument();
     });
   });
 });

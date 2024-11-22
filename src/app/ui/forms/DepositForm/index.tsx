@@ -87,7 +87,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
               },
               minLength:{
                 value: 5,
-                message: 'The account number must be at least 8 digits',
+                message: 'Account number must be at least 8 digits',
               }
             })}
            
