@@ -1,6 +1,7 @@
+import { act } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { DepositForm } from '@ui/forms/DepositForm';
-import { act } from 'react';
+
 import { renderWithReactHookForm } from 'test/mocked-functions/render-with-react-hook-form';
 
 describe('<DepositForm />', () => {
@@ -115,4 +116,36 @@ describe('<DepositForm />', () => {
     expect(submitButton).toBeDisabled();
   });
 
+  test('Resets the form when loadingSubmit is false', async ()=> {
+    const mockedHandleSubmitForm = vi.fn();
+    renderWithReactHookForm(
+      <DepositForm
+        handleSubmitForm={mockedHandleSubmitForm}
+        isLoadingSubmit={false} />,
+      {
+        toPassBack: [],
+        defaultValues: {
+          accountDestination: '',
+          amount: 0,
+        }
+      }
+    );
+
+    const accountInput = screen.getByRole('textbox', { name: 'Account Number' }) as HTMLInputElement;
+    const amountInput = screen.getByRole('spinbutton', { name: 'Amount' }) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: 'Deposit' });
+    
+    act(() => {
+      fireEvent.change(accountInput, { target: { value: '12345678' } });
+      fireEvent.change(amountInput, { target: { value: 100 } });
+      fireEvent.click(submitButton);
+    });
+
+    await waitFor(() => {
+      expect(mockedHandleSubmitForm).toHaveBeenCalled();
+      expect(accountInput.value).toBe('');
+      expect(amountInput.value).toBe('');
+    });
+
+  });
 });
