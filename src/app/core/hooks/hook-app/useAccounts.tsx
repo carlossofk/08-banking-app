@@ -23,7 +23,7 @@ const useAccounts = () => {
 
   // ===> Get account info from session storage
   useEffect(() => {
-    if(state.bankAccounts) {
+    if(state.bankAccounts && state.bankAccounts.length > 0) {
       setKeySessionStorage(SESSION_STORAGE_KEYS.ACCOUNT_INFO, JSON.stringify(state.bankAccounts));
       return;
     };
