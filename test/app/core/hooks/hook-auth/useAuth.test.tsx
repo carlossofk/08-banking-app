@@ -3,10 +3,12 @@ import { Mock } from 'vitest';
 import { useNavigate } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
 
+import { SESSION_STORAGE_KEYS } from '@core-constants/session-storage';
 import { useAuth } from '@core-hooks/hook-auth/useAuth';
 import { LoginUserService } from '@core-services/auth/loginUser.service';
-import { renderMockAuthContext } from 'test/mocked-functions/render-wrapper-auth-provider';
+import { getKeySessionStorage } from '@core-utils/handle-session-client';
 
+import { renderMockAuthContext } from 'test/mocked-functions/render-wrapper-auth-provider';
 
 vi.mock('react-router-dom', () => ({
   useNavigate: vi.fn(),
@@ -62,15 +64,16 @@ describe('<useAuth />', () => {
     };
     
     // ==> Mocks functions and custom hooks
-    vi.mocked(LoginUserService as Mock).mockResolvedValue(mockedLoginResponse);
     const mockDispatch = vi.fn();
     const wrapperMock = renderMockAuthContext({
       stateMock: { user: null, token: null },
       mockDispatch
     });
+
     const { result } = renderHook(() => useAuth(), { wrapper: wrapperMock });
     
     // ==> Call loginUser
+    vi.mocked(LoginUserService as Mock).mockResolvedValue(mockedLoginResponse);
     await act(async () => {
       await result.current.loginUser(mockUser.userName, mockUser.password);
     });
@@ -101,9 +104,81 @@ describe('<useAuth />', () => {
   });
   
 
-  test.todo('should return the logoutUser function');
-  test.todo('should return the isAuthenticated');
-  test.todo('should return the isLoading');
-  test.todo('should return the error');
+  test('Should return the logoutUser function', () => {
+    const mockDispatch = vi.fn();
+    const wrapperMock = renderMockAuthContext({
+      stateMock: { user: null, token: null },
+      mockDispatch
+    });
+    const { result } = renderHook(() => useAuth(), { wrapper: wrapperMock });
+
+    const logoutUser = result.current.logoutUser;
+    expect(logoutUser).toBeDefined();
+    expect(logoutUser).toBeInstanceOf(Function);
+  });
+
+
+  test('Should return and toggle isLoading during login', async () => {
+    const mockDispatch = vi.fn();
+    const wrapperMock = renderMockAuthContext({
+      stateMock: { user: null, token: null },
+      mockDispatch,
+    });
+  
+    const { result } = renderHook(() => useAuth(), { wrapper: wrapperMock });
+  
+    // Verify that `isLoading` is false
+    expect(result.current.loadinOperations).toBeDefined();
+    expect(typeof result.current.loadinOperations).toBe('boolean');
+    expect(result.current.loadinOperations).toBe(false);
+  
+    //  We mock the loginUser function to return a resolved promise
+    vi.mocked(LoginUserService as Mock).mockResolvedValue(mockedLoginResponse);
+    await act(async () => {
+      await result.current.loginUser('testUser', 'testPassword');
+    });
+  
+    expect(result.current.loadinOperations).toBe(false);
+  });
+
+
+  test('Should save in session storage the user and token', async () => {
+    const mockDispatch = vi.fn();
+    const wrapperMock = renderMockAuthContext({
+      stateMock: { user: null, token: null },
+      mockDispatch,
+    });
+
+    const { result } = renderHook(() => useAuth(), { wrapper: wrapperMock });
+
+    vi.mocked(LoginUserService as Mock).mockResolvedValue(mockedLoginResponse);
+    await act(async () => {
+      await result.current.loginUser('testUser', 'testPassword');
+    });
+
+    expect(getKeySessionStorage(SESSION_STORAGE_KEYS.USER)).toBe(JSON.stringify({ userName:'testUser', role:[ 'VIP' ] }));
+    expect(getKeySessionStorage(SESSION_STORAGE_KEYS.TOKEN_API)).toBe(mockedLoginResponse.data.token);
+  });
+
+
+  test('Should not exist user and token in session storage after logout', async () => {
+    const mockDispatch = vi.fn();
+    const wrapperMock = renderMockAuthContext({
+      stateMock: { user: null, token: null },
+      mockDispatch,
+    });
+
+    const { result } = renderHook(() => useAuth(), { wrapper: wrapperMock });
+
+    vi.mocked(LoginUserService as Mock).mockResolvedValue(mockedLoginResponse);
+    await act(async () => await result.current.loginUser('testUser', 'testPassword'));
+    expect(getKeySessionStorage(SESSION_STORAGE_KEYS.USER)).toBe(JSON.stringify({ userName:'testUser', role:[ 'VIP' ] }));
+    expect(getKeySessionStorage(SESSION_STORAGE_KEYS.TOKEN_API)).toBe(mockedLoginResponse.data.token);
+
+    act( () => result.current.logoutUser() );
+    expect(getKeySessionStorage(SESSION_STORAGE_KEYS.USER)).toBe(null);
+    expect(getKeySessionStorage(SESSION_STORAGE_KEYS.TOKEN_API)).toBe(null);
+  });
+
 
 });
