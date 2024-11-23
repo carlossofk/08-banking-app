@@ -7,7 +7,7 @@ import { Detalle, IWithdraw, IWithdrawResponse } from '@core-interfaces/api/with
 import { withdrawMapperToApp } from '@core-mappers/ApiTo/transaction.mapper';
 
 import { dinHeaderMapper } from '@core-mappers/toApi/dinHeader.mapper';
-import { purchaseMapper } from '@core-mappers/toApi/purchaseBody.mapper';
+import { withDrawBodyMapper } from '@core-mappers/toApi/withdrawBody.mapper';
 
 import { http } from '@core-services/generals/http';
 import { getCookie } from '@core-utils/handle-cookie';
@@ -27,7 +27,7 @@ export const withdrawService = async({ amount, accountUser, customerUser }: Para
     ip: 'localhost', 
   });
 
-  const dinBody = await purchaseMapper({
+  const dinBody = await withDrawBodyMapper({
     amount, 
     accountUser, 
     customerUser

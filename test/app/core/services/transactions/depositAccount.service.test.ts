@@ -23,7 +23,7 @@ vi.mock('@core-utils/handle-cookie');
 describe('DepositAccountService', () => {
   const parameter = {
     amount: '100',
-    accountUser: 'user123',
+    accountUser: '123456',
     accountDestination: 'dest123',
     customerUser: 'customer123',
   };
@@ -51,9 +51,9 @@ describe('DepositAccountService', () => {
   const mockedMappedResponse = { 
     accountDestination: 'dest123',	
     accountOrigin: +parameter.accountUser,
-    balance: 0,
+    balance: 1000,
     typeTransaction: 'deposit',
-    taxTransaction: 0,
+    taxTransaction: 1.5,
     amountTransaction: 100,
   };
    
