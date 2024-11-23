@@ -8,7 +8,7 @@ import { useAuth } from '@core-hooks/hook-auth/useAuth';
 import { LoginUserService } from '@core-services/auth/loginUser.service';
 import { getKeySessionStorage } from '@core-utils/handle-session-client';
 
-import { renderMockAuthContext } from 'test/mocked-functions/render-wrapper-auth-provider';
+import { renderMockAuthContext } from 'test/mocked-functions/render-mock-auth-context';
 
 vi.mock('react-router-dom', () => ({
   useNavigate: vi.fn(),
