@@ -27,6 +27,7 @@ export default defineConfig({
         ...coverageConfigDefaults.exclude,
         'src/App.tsx',
         'src/main.tsx',
+        'src/app/*/index.ts',
         'src/app/containers/*',
         'src/app/ui/layouts/*',
       ]
