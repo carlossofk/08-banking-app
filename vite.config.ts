@@ -21,12 +21,12 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './test/tests-setup.ts',
     coverage: {
-      reporter: [ 'text', 'json', 'html' ],
+      enabled: true,
+      reporter: [ 'html' ],
       exclude: [
         ...coverageConfigDefaults.exclude,
         'src/App.tsx',
         'src/main.tsx',
-        'src/app/*/index.ts',
         'src/app/containers/*',
         'src/app/ui/layouts/*',
       ]
