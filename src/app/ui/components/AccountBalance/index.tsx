@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { GrFormViewHide, GrView } from 'react-icons/gr';
 
 import { IBankAccount } from '@core-interfaces/app/account';
@@ -9,8 +9,9 @@ interface Props {
  bankAccounts: IBankAccount[];
 }
 
-export const AccountBalance = ({ bankAccounts }: Props) => {
+export const AccountBalance = memo( ({ bankAccounts }: Props) => {
   const [ hiddenBalances, setHiddenBalances ] = useState<boolean[]>(Array(bankAccounts?.length).fill(false));
+  
   const toggleBalanceVisibility = (index: number) => {
     const updatedBalances = [ ...hiddenBalances ];
     updatedBalances[index] = !updatedBalances[index];
@@ -51,4 +52,4 @@ export const AccountBalance = ({ bankAccounts }: Props) => {
       ))}
     </section>
   );
-};
+});

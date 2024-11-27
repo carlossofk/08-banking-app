@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { PURCHASE_TYPE } from '@core-constants/transaction';
@@ -16,7 +16,7 @@ interface FormValues {
   amount: number;
 }
 
-const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSubmit }) => {
+const PurchaseForm: React.FC<PurchaseFormProps> = memo( ({ handleSubmitForm, loadingSubmit }) => {
   const { openShareModal, setDataShareModal } = useModalShare();
   const [ purchaseType, setPurchaseType ] = useState<PURCHASE_TYPE>(PURCHASE_TYPE.PHYSICAL);
   const { 
@@ -94,6 +94,6 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ handleSubmitForm, loadingSu
       </form>
     </section>
   );
-};
+});
 
 export default PurchaseForm;

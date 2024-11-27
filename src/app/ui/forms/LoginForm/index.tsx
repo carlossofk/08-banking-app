@@ -5,12 +5,14 @@ import { useLoginFormControl } from '@core-hooks/hook-form/useLoginForm.control'
 
 import './styles.scss';
 import { FaSpinner } from 'react-icons/fa';
+import { memo } from 'react';
 
 interface Props{
   handlerLogin: (user: string, password: string) => void;
   loadSubmit: boolean;
 }
-export const LoginForm = ({ handlerLogin , loadSubmit }: Props) => {
+
+export const LoginForm = memo( ({ handlerLogin , loadSubmit }: Props) => {
 
   const { formState, control, handleSubmit } = useLoginFormControl();
 
@@ -72,4 +74,4 @@ export const LoginForm = ({ handlerLogin , loadSubmit }: Props) => {
       </main>
     </section>
   );
-};
+});

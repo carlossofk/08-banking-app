@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useModalShare } from '@core-hooks/hook-app/useModalShare';
@@ -15,7 +15,7 @@ interface FormValues {
   amount: number;
 }
 
-export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm, loadingSubmit }) => {
+export const WithdrawalForm: React.FC<WithdrawalFormProps> = memo( ({ handleSubmitForm, loadingSubmit }) => {
 
   const { openShareModal, setDataShareModal } = useModalShare();
   const { 
@@ -77,5 +77,5 @@ export const WithdrawalForm: React.FC<WithdrawalFormProps> = ({ handleSubmitForm
       </form>
     </section>
   );
-};
+});
 

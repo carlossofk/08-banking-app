@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './styles.scss';
 import { DEPOSIT_TYPE } from '@core-constants/transaction';
@@ -18,22 +18,22 @@ interface DepositFormProps {
   isLoadingSubmit: boolean;
 }
 
-export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLoadingSubmit }) => {
+export const DepositForm: React.FC<DepositFormProps> = memo( ({ handleSubmitForm, isLoadingSubmit }) => {
   
   const { openShareModal, setDataShareModal } = useModalShare();
   const [ depositType, setDepositType ] = useState<DEPOSIT_TYPE>(DEPOSIT_TYPE.BRANCH);
   const { register, handleSubmit, formState: { errors, isSubmitSuccessful }, reset } = useForm<FormValues>();
-
+  
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDepositType(e.target.value as DEPOSIT_TYPE);
   };
-
+  
   const submitHandler: SubmitHandler<FormValues> = async(data) => {
     const resp = await handleSubmitForm(depositType, { 
       accountDestination: data.accountDestination, 
       amount: data.amount,
     });
-
+  
     setDataShareModal(MODAL_TYPE.MODAL_TRANSACTION, { 
       accountOrigin: resp?.accountOrigin,
       amountTransaction: resp?.amountTransaction,
@@ -43,18 +43,18 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
     });
     openShareModal(MODAL_TYPE.MODAL_TRANSACTION);
   };
-
+  
   useEffect(() => {
     if(!isLoadingSubmit){
       reset();
     }
   }, [ reset, isSubmitSuccessful, isLoadingSubmit ]);
-
+  
   return (
     <section className="deposit-form">
       <h2 className="deposit-form__title">Deposit</h2>
       <form className="deposit-form__form" onSubmit={handleSubmit(submitHandler)}>
-
+  
         <div className="deposit-form__field">
           <label htmlFor="deposit-type" className="deposit-form__label">Deposit Type</label>
           <select
@@ -69,8 +69,8 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
             <option value={DEPOSIT_TYPE.ACCOUNT}>Deposit from Another Account</option>
           </select>
         </div>
-
-       
+  
+         
         <div className="deposit-form__field">
           <label htmlFor="account" className="deposit-form__label">Account Number</label>
           <input
@@ -90,11 +90,11 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
                 message: 'Account number must be at least 8 digits',
               }
             })}
-           
+             
           />
           {errors.accountDestination && <span className="deposit-form__error">{errors.accountDestination.message}</span>}
         </div>
-
+  
         <div className="deposit-form__field">
           <label htmlFor="amount" className="deposit-form__label">Amount</label>
           <input
@@ -113,17 +113,17 @@ export const DepositForm: React.FC<DepositFormProps> = ({ handleSubmitForm, isLo
           />
           {errors.amount && <span className="deposit-form__error">{errors.amount.message}</span>}
         </div>
-
+  
         <button 
           type="submit" 
           className="deposit-form__button"
           disabled={isLoadingSubmit}
         >
           {isLoadingSubmit && <FaSpinner className='deposit-form__spinner' /> }
-           Deposit
+             Deposit
         </button>
       </form>
     </section>
   );
-};
+});
 
